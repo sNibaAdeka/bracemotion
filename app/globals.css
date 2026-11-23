@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/* Palette: graphite-safety-orange. The prototype is photographed on a dark
+   workbench; the orange reads as the indicator colour on lab equipment. */
+:root {
+  --bg: #18191b;
+  --surface: #222427;
+  --surface-2: #2b2d31;
+  --ink: #eff0f1;
+  --muted: #b3b6bb;
+  --faint: #90949a;
+  --line: rgb(239 240 241 / 0.1);
+  --line-strong: rgb(239 240 241 / 0.18);
+  --accent: #ff4a1f;
+  --accent-ink: #18191b;
+  --axis-x: #ff4a1f;
+  --axis-y: #eff0f1;
+  --axis-z: #8fb3c9;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --header-h: 64px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+  --radius-card: var(--radius);
+  --radius-panel: var(--radius-lg);
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  scroll-padding-top: var(--header-h);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+/* One container: equal left and right edges everywhere. */
+.wrap {
+  width: min(1280px, calc(100% - 32px));
+  margin-inline: auto;
+}
+@media (min-width: 768px) {
+  .wrap { width: min(1280px, calc(100% - 64px)); }
+}
+
+/* Sections fill one screen and start under the fixed header. */
+.screen {
+  min-height: 100svh;
+  padding-top: calc(var(--header-h) + 56px);
+  padding-bottom: 72px;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 767px) {
+  .screen { padding-top: calc(var(--header-h) + 32px); padding-bottom: 56px; }
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.h2 {
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+/* Buttons: one pair. Step up on hover, press on click. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms, border-color 160ms, color 160ms;
+  will-change: transform;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0) scale(0.97); transition-duration: 90ms; }
+.btn svg { transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1); }
+.btn:hover svg { transform: translateX(3px); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: #ff6640; }
+.btn-ghost { border: 1px solid var(--line-strong); color: var(--ink); }
+.btn-ghost:hover { border-color: rgb(239 240 241 / 0.45); background: rgb(239 240 241 / 0.04); }
+
+/* Text links: the underline draws in on hover. */
+.link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 220ms cubic-bezier(0.22, 1, 0.36, 1), color 160ms;
+  padding-bottom: 2px;
+}
+.link:hover { background-size: 100% 1px; color: var(--ink); }
+
+/* Photo frames: the picture zooms a little inside its frame. */
+.frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.015);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.frame:hover img { transform: scale(1.045); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), border-color 200ms;
+}
+.card-link:hover { transform: translateY(-2px); border-color: var(--line-strong); }
+
+.hairline { border-top: 1px solid var(--line); }
+
+}
+
+
+/* Hero entrance: once on load, transform and opacity only, no JavaScript needed. */
+@keyframes enter-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes enter-scale { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: none; } }
+.enter { animation: enter-up 500ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.enter-photo { animation: enter-scale 500ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
