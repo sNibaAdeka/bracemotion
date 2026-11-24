@@ -56,7 +56,7 @@ public/images/         prototype photographs, V2 to V4
 
 ## Deploy
 
-Netlify builds with `npm run build` and publishes `out/` (see `netlify.toml`).
+The repository is connected to Netlify: every push to `main` runs `npm run build` and publishes `out/` to the live site (see `netlify.toml`).
 
 ## Accessibility and motion
 
