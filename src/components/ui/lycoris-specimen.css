@@ -99,3 +99,12 @@
 .brace-paths .bm-paths{opacity:.5;-webkit-mask-image:radial-gradient(ellipse 95% 90% at 50% 50%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 95% 90% at 50% 50%,#000 55%,transparent 100%)}
 .brace-specimen:not(.is-static) .brace-bottom{animation:bm-rise-in .7s cubic-bezier(.25,.46,.45,.94) 1.25s both}
 @media(prefers-reduced-motion:reduce){.brace-specimen .brace-bottom{animation:none}}
+/* The bracelet appears only when it is ready to draw: the loader hands over to a canvas fade. */
+.brace-scene-shell .product-canvas{opacity:0;transition:opacity .9s cubic-bezier(.22,1,.36,1)}
+.brace-scene-shell[data-ready=true] .product-canvas{opacity:1}
+.brace-loader{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;transition:opacity .35s ease-in}
+.brace-scene-shell[data-ready=true] .brace-loader{opacity:0}
+@media(prefers-reduced-motion:reduce){.brace-scene-shell .product-canvas,.brace-loader{transition:none}}
+/* Cover: the bracelet sits in front of the wordmark and gets more room, so it is always seen whole. */
+.brace-cover-word{z-index:1}
+@media(min-width:768px){.brace-scene-shell[data-layout=cover]{inset:11cqh 10cqw 27cqh}.brace-cover-word{top:72cqh}}

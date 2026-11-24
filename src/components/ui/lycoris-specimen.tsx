@@ -43,7 +43,8 @@ export default function LycorisSpecimen({name='BraceMotion', description=storyPa
   const sceneProgress=useSpring(scrollYProgress,{stiffness:180,damping:30,mass:.6,restDelta:.0002,restSpeed:.004});
   // Drifting lines belong to the cover only; they fade out as the story starts.
   const pathsOpacity=useTransform(sceneProgress,[0,.035],[1,0]);
-  const [chapter,setChapter] = useState(0), [available,setAvailable] = useState(true);
+  const [chapter,setChapter] = useState(0), [available,setAvailable] = useState(true), [sceneReady,setSceneReady] = useState(false);
+  const markReady = useCallback(() => setSceneReady(true),[]);
   const [photoPose,setPhotoPose] = useState<'closed'|'open'>('closed');
   const staticMode = Boolean(reduced) || !available;
   const unavailable = useCallback(() => setAvailable(false),[]);
@@ -125,8 +126,9 @@ export default function LycorisSpecimen({name='BraceMotion', description=storyPa
       <h1 className="brace-sr-only">{name}: a closer look at movement.</h1>
       <div ref={stage} id="device" className="brace-stage">
         <div className="brace-ambient" aria-hidden="true">{!staticMode&&chapter===0&&<motion.div className="brace-paths" style={{opacity:pathsOpacity}}><BackgroundPaths count={30}/></motion.div>}</div>
-        <div className="brace-scene-shell product-stage" data-layout={staticMode?'static':chapter===0?'cover':chapter===1?'crown':'detail'}>
-          {staticMode?<ProductPhoto pose={photoPose}/>:<ProductBoundary onUnavailable={unavailable}><Suspense fallback={<BoxLoader label="Loading the 3D bracelet"/>}><DetailedScene progress={sceneProgress} activeStep={chapter} cinematic className="product-canvas" onUnavailable={unavailable}/></Suspense></ProductBoundary>}
+        <div className="brace-scene-shell product-stage" data-layout={staticMode?'static':chapter===0?'cover':chapter===1?'crown':'detail'} data-ready={staticMode||sceneReady}>
+          {staticMode?<ProductPhoto pose={photoPose}/>:<ProductBoundary onUnavailable={unavailable}><Suspense fallback={null}><DetailedScene progress={sceneProgress} activeStep={chapter} cinematic className="product-canvas" onUnavailable={unavailable} onReady={markReady}/></Suspense></ProductBoundary>}
+          {!staticMode&&<div className="brace-loader" aria-hidden={sceneReady}><BoxLoader label="Loading the 3D bracelet"/></div>}
         </div>
         <div ref={word} className="brace-cover-word" aria-hidden="true" style={{fontSize:`min(${Math.min(13,128/Math.max(1,letters.length))}cqw, 20cqh)`}}>
           {letters.map((letter,index)=><span data-ch key={index}><span className="brace-letter-enter" style={{animationDelay:`${.35+index*.055}s`}}>{letter===' '?'\u00a0':letter}</span></span>)}

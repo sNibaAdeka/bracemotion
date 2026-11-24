@@ -19,6 +19,8 @@ export interface DetailedSceneProps {
   className?: string;
   onUnavailable?: () => void;
   cinematic?: boolean;
+  /** Fires once every material is compiled and the first visible frame can draw without a stall. */
+  onReady?: () => void;
 }
 function SourceFallback() {
   return <img src='/images/prototype-v4-closed.webp' alt='Photograph of the BraceMotion V4 prototype: white enclosure on a light textile strap' style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '8%' }} />;
@@ -30,18 +32,34 @@ class SceneBoundary extends Component<{ children: ReactNode; onUnavailable: () =
   render() { return this.state.failed ? <SourceFallback /> : this.props.children; }
 }
 interface ArrowRefs { path: RefObject<SVGPathElement | null>; dot: RefObject<SVGCircleElement | null> }
-type StageProps = Pick<DetailedSceneProps, 'progress' | 'activeStep' | 'cinematic'> & { arrows: ArrowRefs; angles: [number, number]; surface:RefObject<HTMLDivElement|null> };
-function Model({ progress, activeStep, arrows, cinematic, angles, surface }: StageProps) {
+type StageProps = Pick<DetailedSceneProps, 'progress' | 'activeStep' | 'cinematic' | 'onReady'> & { arrows: ArrowRefs; angles: [number, number]; surface:RefObject<HTMLDivElement|null> };
+function Model({ progress, activeStep, arrows, cinematic, angles, surface, onReady }: StageProps) {
   const root = useRef<THREE.Group>(null);
   const lid = useRef<THREE.Group>(null), controller = useRef<THREE.Group>(null), sensor = useRef<THREE.Group>(null), motor = useRef<THREE.Group>(null), power = useRef<THREE.Group>(null);
   const lastStrap = useRef(-1);
-  const { camera, size, invalidate, gl, setFrameloop } = useThree();
+  const { camera, size, invalidate, gl, scene, setFrameloop } = useThree();
+  const ready = useRef(false);
   // Live motion state: damped drag, pointer tilt, entrance and whether frames must keep running.
   const live = useRef({ angles: [0, 0] as [number, number], pointer: { x: 0, y: 0 }, target: { x: 0, y: 0 }, start: -1, loop: 'demand' as 'always' | 'demand', visible: true });
-  const owned = useMemo(() => ({
-    lid: createLid(), body: createCase(), base: createBase(), brace: createLettering('Brace'), motion: createLettering('Motion'),
-    left: createStrapGeometry(), right: createStrapGeometry(), switchHousing: createSwitchHousing(),
-  }), []);
+  const owned = useMemo(() => {
+    const geometry = {
+      lid: createLid(), body: createCase(), base: createBase(), brace: createLettering('Brace'), motion: createLettering('Motion'),
+      left: createStrapGeometry(), right: createStrapGeometry(), switchHousing: createSwitchHousing(),
+    };
+    // Real attributes before shader compilation, so programs match the first drawn frame.
+    updateStrapGeometry(geometry.left, -1, 0); updateStrapGeometry(geometry.right, 1, 0);
+    return geometry;
+  }, []);
+  // Compile every program off the main thread (KHR_parallel_shader_compile) while the loader
+  // plays; the bracelet stays hidden until then, so the page never freezes on a half-drawn model.
+  useEffect(() => {
+    const group = root.current; if (!group) return;
+    let cancelled = false;
+    group.visible = false;
+    const reveal = () => { if (cancelled) return; group.visible = true; ready.current = true; live.current.start = -1; invalidate(); onReady?.(); };
+    gl.compileAsync(scene, camera).then(reveal, reveal);
+    return () => { cancelled = true; };
+  }, [gl, scene, camera, invalidate, onReady]);
   const fabric = useMemo(() => createWovenTexture(), []);
   const print = useMemo(() => createPrintTexture(), []);
   const materialDefaults=useMemo(()=>new WeakMap<THREE.Material,{opacity:number;transparent:boolean;depthWrite:boolean}>(),[]);
@@ -66,7 +84,7 @@ function Model({ progress, activeStep, arrows, cinematic, angles, surface }: Sta
   useEffect(() => { invalidate(); }, [activeStep, size, invalidate, angles]);
 
   useFrame((state, delta) => {
-    if (!root.current) return;
+    if (!root.current || !ready.current) return;
     const m = live.current, dt = Math.min(delta, 1 / 20), time = state.clock.elapsedTime;
     if (m.start < 0) m.start = time;
     const p = Math.min(1, Math.max(0, Number.isFinite(progress.get()) ? progress.get() : 0));
@@ -91,10 +109,11 @@ function Model({ progress, activeStep, arrows, cinematic, angles, surface }: Sta
     // Retain a quiet assembly context without letting an enlarged shell compete
     // with the board under inspection. Restore original material flags exactly.
     const focusAmount=cinematic?Number(Boolean(FOCUS_PARTS[index]))*(1-mix)+Number(Boolean(FOCUS_PARTS[next]))*mix:0;
-    // Entrance: the bracelet fades up, turns and settles over the first ~2 seconds.
-    const introRaw = cinematic ? clamp01((time - m.start - .25) / 1.8) : 1;
-    const intro = 1 - Math.pow(1 - introRaw, 4), fade = cinematic ? smoothstep(0, .4, introRaw) : 1;
-    const contextOpacity=(1-focusAmount*.90)*fade;
+    // Entrance: the whole canvas fades in (CSS), the solid bracelet turns and settles. No
+    // material transparency, so the case never turns see-through while it arrives.
+    const introRaw = cinematic ? clamp01((time - m.start) / 1.6) : 1;
+    const intro = 1 - Math.pow(1 - introRaw, 3);
+    const contextOpacity=1-focusAmount*.90;
     const shade=(group:THREE.Object3D,amount:number)=>group.traverse(object=>{
       if(!(object instanceof THREE.Mesh))return;
       const materials=Array.isArray(object.material)?object.material:[object.material];
@@ -107,7 +126,7 @@ function Model({ progress, activeStep, arrows, cinematic, angles, surface }: Sta
       }
     });
     shade(root.current,contextOpacity);
-    for(const [part,ref] of parts){if(ref.current){const weight=cinematic?(FOCUS_PARTS[index]===part?1-mix:0)+(FOCUS_PARTS[next]===part?mix:0):0;shade(ref.current,contextOpacity+weight*.90*fade);}}
+    for(const [part,ref] of parts){if(ref.current){const weight=cinematic?(FOCUS_PARTS[index]===part?1-mix:0)+(FOCUS_PARTS[next]===part?mix:0):0;shade(ref.current,contextOpacity+weight*.90);}}
     // Fit the complete overview or focus the emerging assembly. Screen-parallel
     // camera axes and one stable detail viewport keep transitions easy to follow.
     scratch.box.setFromObject(root.current);
@@ -132,11 +151,13 @@ function Model({ progress, activeStep, arrows, cinematic, angles, surface }: Sta
     const cover = cinematic ? 1 - smoothstep(0, .03, p) : 0;
     const follow = 1 - Math.exp(-dt * 3.2);
     m.pointer.x += (m.target.x - m.pointer.x) * follow; m.pointer.y += (m.target.y - m.pointer.y) * follow;
-    root.current.rotation.x += (Math.sin(time * .42 + 1.1) * .035 + m.pointer.y * .1) * cover + (1 - intro) * .32;
-    root.current.rotation.y += (Math.sin(time * .55) * .09 + m.pointer.x * .18) * cover - (1 - intro) * .85;
-    root.current.rotation.z += Math.sin(time * .5 + 2.1) * .018 * cover;
-    root.current.position.y = Math.sin(time * .8) * .05 * cover - (1 - intro) * .45;
-    root.current.scale.setScalar(.84 + .16 * intro);
+    // Idle motion eases in after the entrance instead of jumping on top of it.
+    const idle = cover * smoothstep(.55, 1, introRaw);
+    root.current.rotation.x += (Math.sin(time * .42 + 1.1) * .03 + m.pointer.y * .09) * idle + (1 - intro) * .18;
+    root.current.rotation.y += (Math.sin(time * .55) * .08 + m.pointer.x * .16) * idle - (1 - intro) * .55;
+    root.current.rotation.z += Math.sin(time * .5 + 2.1) * .016 * idle;
+    root.current.position.y = Math.sin(time * .8) * .045 * idle - (1 - intro) * .18;
+    root.current.scale.setScalar(.9 + .1 * intro);
     root.current.updateWorldMatrix(true, true);
     const animating = Boolean(cinematic) && m.visible && !document.hidden && (cover > .001 || introRaw < 1);
     const loop = animating ? 'always' : 'demand';
@@ -213,7 +234,7 @@ function Stage(props: StageProps) {
   </>;
 }
 /** Procedural reconstruction. Outer geometry follows V4; internal arrangement is illustrative. */
-export default function DetailedScene({ progress, activeStep, className, onUnavailable, cinematic=false }: DetailedSceneProps) {
+export default function DetailedScene({ progress, activeStep, className, onUnavailable, onReady, cinematic=false }: DetailedSceneProps) {
   const mounted = useRef(true);
   useLayoutEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const [unavailable, setUnavailable] = useState(false);
@@ -245,7 +266,7 @@ export default function DetailedScene({ progress, activeStep, className, onUnava
           gl.setClearColor('#000', 0); gl.toneMapping = THREE.ACESFilmicToneMapping; gl.toneMappingExposure = 1;
           gl.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); if (mounted.current) reportUnavailable(); }, { once: true });
         }} style={{ width: '100%', height: '100%', pointerEvents: 'none' }}>
-        <Stage progress={progress} activeStep={step} arrows={arrows} cinematic={cinematic} angles={angles} surface={sceneHost} />
+        <Stage progress={progress} activeStep={step} arrows={arrows} cinematic={cinematic} angles={angles} surface={sceneHost} onReady={onReady} />
       </Canvas>}
     </SceneBoundary>
     </div>
