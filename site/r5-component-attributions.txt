@@ -1,0 +1,15 @@
+BraceMotion R5 component adaptations
+
+The original project's attribution and license notices remain in attributions.txt and licenses/.
+
+LycorisSpecimen: adapted from the complete component supplied by the project owner, credited in that source to Kedhareswer. Reference links: https://21st.dev/@kedhareswer and https://github.com/kedhareswer. The product adaptation replaces the flower/type specimen with the existing source-informed BraceMotion bracelet and English product story. The original reference is preserved in the source deliverable; no unsupported upstream license claim is made here.
+
+GradientMenu, SquishyPricing, SpaceLogin, TextScrollAnimation (Skiper31), StatsBento and AreaChart: project-owner-supplied references, adapted and documented in the source deliverable. Their demo branding, prices, success metrics, sample financial series and stock technology icons are not presented as project facts.
+
+SpaceLogin uses a locally authored decorative astronaut SVG fallback; it is not the original supplied PNG.
+
+Additional libraries: lucide-react (ISC, retained notice in licenses/LUCIDE-LICENSE); @subframe/core (ISC, retained notice in licenses/SUBFRAME-NOTICE.txt). The Subframe chart renderer loads only when valid nonempty data is provided. Motion, React, Three.js and original component notices remain in the dependency/source records.
+
+The optional Federant display face is loaded from Google Fonts at runtime with serif fallbacks. Original self-hosted Evolventa assets and notices are retained unchanged.
+
+NexaCore ServiceCard and Precision MobileStack: adapted from the owner-supplied archive, MIT Copyright (c) 2026 Mohammad Shehadeh. Upstream https://github.com/MohammadShehadeh/hirael commit 85b198f0ab19238ac3bdfe410cd9766d065b1974. Full original notices: /licenses/nexacore/LICENSE and /licenses/nexacore/ATTRIBUTION.md. The adaptation uses glow cards for confirmed BraceMotion prototype functions and a version rail for V1–V4; enterprise copy, stock branding, video and Next fonts were not incorporated.

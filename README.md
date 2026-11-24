@@ -4,70 +4,58 @@ Landing page for **BraceMotion**, a student research prototype: a wrist-worn dev
 
 **Live site:** https://bracemotion.netlify.app
 
-> BraceMotion is a research prototype, not a medical device. Its clinical effect has not been established. The app preview on the site uses synthetic data.
+> BraceMotion is a research prototype, not a medical device. Its clinical effect has not been established.
 
-## The prototype
+## What is here
 
-| Part | Role |
-| --- | --- |
-| ESP32-C3 | Runs the firmware; USB-C and antenna on the board |
-| MPU6050 | Six-axis motion sensor: acceleration and angular velocity |
-| Coin motor | Turns a signal from the board into vibration |
-| Li-Po battery | Powers the board; a separate module charges it |
-| Case and strap | Printed case with a lift-off lid on a thin textile strap |
+This is the R5 version of the site from October 2026: the dark page with the purple hero, the 3D bracelet you can take apart (Assembled / Exploded) and the large Evolventa wordmark.
 
-Builds shown on the site: V2 (from mechanical compensation to vibration), V3 (smaller case, USB-C, motion sensor), V4 (the compact build).
+```
+site/                 the built site, served as is
+  assets/             JavaScript and CSS bundles, including the 3D scene
+  fonts/              Evolventa (see fonts/NOTICE.txt for its licences)
+  images/             prototype photographs, V2 to V4
+  _redirects          client-side routes: /sign-in, /account/preview
+netlify/functions/    the inquiry API used by the "Discuss the project" form
+  inquiry.ts          POST /api/inquiry, stores requests in Netlify Blobs
+  health.ts           GET /api/health
+```
 
-## Stack
+## How it was restored
 
-- Next.js 15 (App Router), exported as a static site (`output: "export"`)
-- TypeScript (strict)
-- Tailwind CSS v4
-- Framer Motion 12
-- Lucide icons, IBM Plex Sans and Plex Mono
+The original build was published from a local folder and never committed. The newest complete copy on disk was the R5 "pure black" revision, which turned every background black. This repository takes that build and puts back the colours of the revision before it (R5 with NexaCore panels), using the values recorded in its QA report:
 
-Components adapted from [21st.dev](https://21st.dev): `background-paths` (hero lines), `health-stat-card` (app overview), `stats-bento` (V4 tile), `mini-chart` (last recording).
+| Part | Pure black | Restored |
+| --- | --- | --- |
+| Hero stage | `#000` | `#160b26` with a soft purple glow |
+| Page and header | `#000` | `#030305` |
+| Section panels | `#000` | `#08080c`, `#111116`, `#141419` |
+| "04" card | `#000` | `#1b1624` |
+| Question block | `#000` | `#17151e` |
+| Pricing cards | `#000` | `#191222`, `#15151e`, `#1d141f` |
+| Service card glow | hidden | shown |
 
-## Run it
+All changes are in `site/assets/index-BSkvKKTD.css`; the JavaScript is the original build.
+
+The November 2026 Next.js rebuild lives on the [`nextjs-rebuild`](https://github.com/sNibaAdeka/bracemotion/tree/nextjs-rebuild) branch.
+
+## Run it locally
 
 ```bash
-git clone https://github.com/sNibaAdeka/bracemotion
-cd bracemotion
+npx serve site -s
+```
+
+The inquiry form needs the Netlify Functions runtime:
+
+```bash
 npm install
-npm run dev
-```
-
-Build the static site into `out/`:
-
-```bash
-npm run build
-```
-
-## Structure
-
-```
-app/                   layout, page, design tokens (globals.css)
-components/sections/   hero, inside, builds, app-demo, questions, closing
-components/ui/         background-paths, stat-card, axis-chart, mini-chart, signal-path
-components/shared/     nav, motion provider
-lib/                   demo data (synthetic), motion tokens, site constants
-public/images/         prototype photographs, V2 to V4
+npx netlify dev
 ```
 
 ## Deploy
 
-The repository is connected to Netlify: every push to `main` runs `npm run build` and publishes `out/` to the live site (see `netlify.toml`).
-
-## Accessibility and motion
-
-- Every animation respects `prefers-reduced-motion`; the hero lines have a pause switch and stay still on phones.
-- Colour contrast is 7:1 or more for body text; focus rings show on every control.
-- The hero entrance is plain CSS, so the page reads in full without JavaScript.
+The repository is connected to Netlify: every push to `main` publishes `site/` and deploys the functions (see `netlify.toml`).
 
 ## Credits
 
-Photographs come from the BraceMotion project presentation.
-
-## License
-
-MIT, see [LICENSE](LICENSE).
+Third-party code and assets are listed in `site/attributions.txt` and `site/r5-component-attributions.txt`. The NexaCore card adaptations are MIT-licensed (`site/licenses/nexacore/`). Photographs come from the BraceMotion project presentation.

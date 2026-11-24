@@ -1,0 +1,15 @@
+Evolventa font family, official unmodified WOFF assets
+
+Copyright (c) 2016 by Alex I. Kuznetsov.
+Contains work released as URW Gothic L version 001.005:
+Copyright URW Software, Copyright 1996 by URW.
+
+The original author's manual offers the choice of GPL version 2 or LaTeX Project Public License version 1.3c (or later). Full original license texts accompany these assets as gpl.txt and lppl.txt. These files are not SIL OFL fonts.
+
+Source and complete upstream distribution:
+https://evolventa.github.io/
+https://github.com/evolventa/evolventa
+
+Downloaded directly from the author's repository through authenticated read-only GitHub tools on 2026-10-05. No font files were modified, subsetted, renamed internally, or converted. The official repository provides WOFF, not WOFF2. Keep the applicable license, copyright, source attribution and source access with any redistribution; consult the original license for its conditions.
+
+Use Evolventa-Bold.woff with CSS font-weight:700 and Evolventa-Regular.woff with font-weight:400. Both were parsed successfully with fontTools and contain the Russian/Cyrillic characters used in the draft website copy. The source blobs and URLs are recorded in provenance.json.

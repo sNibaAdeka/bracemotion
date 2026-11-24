@@ -1,0 +1,5 @@
+# Client-side routes of the single-page app
+/account     /index.html  200
+/account/*   /index.html  200
+/sign-in     /index.html  200
+/sign-in/*   /index.html  200
