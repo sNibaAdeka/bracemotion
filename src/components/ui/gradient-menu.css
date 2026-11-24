@@ -1,0 +1,170 @@
+/* Scoped production adaptation of the owner's expanding GradientMenu. */
+.gradient-menu {
+  max-width: 100%;
+  width: fit-content;
+  isolation: isolate;
+}
+.gradient-menu-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gradient-menu-item {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+}
+.gradient-menu-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  max-width: 100%;
+  border: 1px solid var(--line, #4c3269);
+  border-radius: 999px;
+  background: var(--surface, #24113c);
+  color: var(--ink, #faf5ff);
+  text-decoration: none;
+  box-shadow: 0 4px 16px #08030f26;
+  transition: width 500ms, border-color 250ms, box-shadow 500ms;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.gradient-menu-link::before,
+.gradient-menu-link::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, var(--gradient-from), var(--gradient-to));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms;
+}
+.gradient-menu-link::after {
+  top: 10px;
+  z-index: -1;
+  filter: blur(15px);
+}
+.gradient-menu-icon {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  font-size: 24px;
+  transition: transform 500ms, opacity 250ms;
+}
+.gradient-menu-icon > svg {width: 24px; height: 24px;}
+.gradient-menu-title {
+  position: absolute;
+  z-index: 1;
+  padding: 0 12px;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 500ms, opacity 250ms;
+}
+.gradient-menu-link:focus-visible {
+  outline: 3px solid var(--focus-ring, #e4c9ff);
+  outline-offset: 4px;
+}
+.gradient-menu-link[aria-current] {border-color: var(--accent, #c69bff);}
+.gradient-menu-link[aria-current]::before {opacity: 1;}
+.gradient-menu-link[aria-current] .gradient-menu-icon {color: white;}
+
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  .gradient-menu-link:hover,
+  .gradient-menu-link:focus-visible {
+    width: 168px;
+    border-color: transparent;
+    box-shadow: none;
+  }
+  .gradient-menu-link:hover::before,
+  .gradient-menu-link:focus-visible::before {opacity: 1;}
+  .gradient-menu-link:hover::after,
+  .gradient-menu-link:focus-visible::after {opacity: .5;}
+  .gradient-menu-link:hover .gradient-menu-icon,
+  .gradient-menu-link:focus-visible .gradient-menu-icon {
+    transform: scale(0);
+    opacity: 0;
+  }
+  .gradient-menu-link:hover .gradient-menu-title,
+  .gradient-menu-link:focus-visible .gradient-menu-title {
+    transform: scale(1);
+    opacity: 1;
+    transition-delay: 150ms;
+  }
+}
+
+/* Every item remains a >=44px target with a visible label on phones/touch. */
+@media (max-width: 767px), (hover: none), (pointer: coarse) {
+  .gradient-menu {width: min(100%, 384px);}
+  .gradient-menu-list {gap: 8px; width: 100%;}
+  .gradient-menu-item {flex: 1 1 44px;}
+  .gradient-menu-link {
+    width: 100%;
+    height: 68px;
+    align-items: flex-start;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .gradient-menu-link::before,
+  .gradient-menu-link::after {
+    inset: 0 auto auto 50%;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    transform: translateX(-50%);
+  }
+  .gradient-menu-link::before {
+    border: 1px solid var(--line, #4c3269);
+    background: var(--surface, #24113c);
+    opacity: 1;
+  }
+  .gradient-menu-link::after {top: 7px;}
+  .gradient-menu-icon {height: 44px;}
+  .gradient-menu-title {
+    inset: auto 0 0;
+    padding: 0;
+    font-size: 9px;
+    letter-spacing: 0;
+    line-height: 20px;
+    text-transform: none;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    color: var(--ink, #faf5ff);
+    transform: none;
+    opacity: 1;
+  }
+  .gradient-menu-link[aria-current]::before,
+  .gradient-menu-link:focus-visible::before {
+    background: linear-gradient(45deg, var(--gradient-from), var(--gradient-to));
+    border-color: transparent;
+  }
+  .gradient-menu-link[aria-current]::after {opacity: .35;}
+  .gradient-menu-link:focus-visible .gradient-menu-icon {color: white;}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-menu-link,
+  .gradient-menu-link::before,
+  .gradient-menu-link::after,
+  .gradient-menu-icon,
+  .gradient-menu-title {transition: none; transition-delay: 0s;}
+}

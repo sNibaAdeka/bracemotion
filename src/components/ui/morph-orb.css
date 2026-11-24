@@ -1,0 +1,56 @@
+/* The user supplied keyframes but no core mo-* rules. All scoped layout/skin
+   rules below are reconstructed for a contained BraceMotion project FAQ. */
+@property --mo-orb-angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+.mo-root{position:relative;width:100%;min-width:0;isolation:isolate;--mo-violet:var(--accent);--mo-soft:var(--accent-light)}
+.mo-root .mo-stage{position:relative;height:260px;width:100%;overflow:hidden;background:var(--surface)}
+.mo-root .mo-bg{position:absolute;inset:0;background:var(--surface);pointer-events:none}
+.mo-root .mo-halo{position:absolute;width:220px;height:220px;left:50%;top:130px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--mo-soft),transparent 68%);opacity:var(--oCenter,0);pointer-events:none}
+.mo-root .mo-mover{position:absolute;left:50%;top:130px;width:100%;height:0;will-change:transform}
+.mo-root .mo-trail{position:absolute;left:0;top:0;width:100px;height:100px;border-radius:50%;background:var(--mo-soft);opacity:0;pointer-events:none}
+.mo-root .mo-actor{position:absolute;top:0;left:0;width:var(--w,560px);height:var(--h,60px);max-width:calc(100% - 32px);border-radius:var(--r,999px);transform:translate(-50%,-50%);isolation:isolate}
+.mo-root .mo-underglow,.mo-root .mo-halo-green,.mo-root .mo-surface,.mo-root .mo-ball,.mo-root .mo-green,.mo-root .mo-card,.mo-root .mo-ring{position:absolute;inset:0;border-radius:inherit;pointer-events:none}
+.mo-root .mo-underglow{background:var(--mo-soft);filter:blur(18px);opacity:calc(var(--oGlow,1)*.6)}
+.mo-root .mo-halo-green{inset:-12px;background:var(--mo-soft);filter:blur(20px);opacity:var(--oHalo,0)}
+.mo-root .mo-surface{background:var(--paper);border:1px solid var(--line);overflow:hidden;opacity:var(--oPill,1)}
+.mo-root .mo-aurora{position:absolute;inset:0;opacity:calc(var(--oAur,1)*.22);pointer-events:none}
+.mo-root .mo-aurora i{position:absolute;width:75%;height:120%;top:-10%;border-radius:50%;filter:blur(20px);background:var(--mo-soft);animation:bm-mo-drift 7s ease-in-out infinite alternate}
+.mo-root .mo-aurora i:nth-child(2){left:25%;animation-delay:-3s}.mo-root .mo-aurora i:nth-child(3){left:55%;animation-delay:-5s}.mo-root .mo-aurora i:nth-child(4){left:-15%;animation-delay:-1s}
+.mo-root .mo-ball{background:radial-gradient(circle at 35% 28%,var(--paper),var(--mo-soft) 80%);border:1px solid var(--mo-violet);opacity:var(--oBall,0)}
+.mo-root .mo-green{background:var(--mo-violet);opacity:var(--oGreen,0);transform:scale(var(--gs,.55))}
+.mo-root .mo-card{background:var(--paper);border:1px solid var(--line);opacity:var(--oCard,0);transform:scale(var(--cs,1))}
+.mo-root .mo-ring{border:1px solid var(--mo-violet);opacity:calc(var(--oRing,1)*.35)}
+.mo-root .mo-input{position:absolute;inset:0;display:flex;align-items:center;gap:12px;margin:0;padding:8px 9px 8px 18px;opacity:var(--oInput,1);transform:scale(var(--inScale,1));z-index:5;border-radius:inherit}
+.mo-root .mo-spark{width:22px;height:22px;color:var(--mo-violet);flex:none}
+.mo-root .mo-field{width:100%;min-width:0;flex:1;padding:8px 0;border:0;border-radius:0;background:transparent;color:var(--ink);font:inherit;font-size:16px;line-height:1.4}
+.mo-root .mo-field::placeholder{color:var(--muted);font-size:14px}
+.mo-root .mo-send{width:44px;height:44px;min-width:44px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper)}
+.mo-root .mo-send svg{width:21px;height:21px}.mo-root .mo-send[data-ready]{background:var(--mo-violet);color:var(--paper)}
+.mo-root .mo-orb{position:absolute;left:50%;top:50%;width:220px;height:220px;transform:translate(-50%,-50%);z-index:3;pointer-events:none}
+.mo-root .mo-pulse{position:absolute;left:0;top:0;width:100%;height:100%;border:1px solid var(--mo-violet);border-radius:50%;opacity:0;pointer-events:none}
+.mo-root .mo-card-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink);font-size:15px;opacity:var(--hOp,0);pointer-events:none;z-index:4}
+.mo-root .mo-status{position:absolute;left:50%;top:218px;min-width:230px;height:28px;transform:translateX(-50%) translateY(calc(var(--sTy,6)*1px));opacity:var(--sOp,0);text-align:center;color:var(--muted);font-size:13px;pointer-events:none}
+.mo-root .mo-lab{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;gap:8px}
+.mo-root .mo-in{animation:bm-mo-in .18s ease-out both}.mo-root .mo-out{animation:bm-mo-out .18s ease-in both}
+.mo-root .mo-dots{display:flex;gap:3px}.mo-root .mo-dots i{width:3px;height:3px;background:currentColor;border-radius:50%;animation:bm-mo-dot 1.2s infinite}.mo-root .mo-dots i:nth-child(2){animation-delay:.15s}.mo-root .mo-dots i:nth-child(3){animation-delay:.3s}
+.mo-root[data-phase=answered] .mo-answer{margin-top:0}
+.mo-root .mo-answer{position:relative;width:100%;min-width:0;margin-top:22px;border-top:1px solid var(--line);padding:22px 0;outline-offset:5px}
+.mo-root .mo-a-head{display:flex;align-items:center;gap:10px;font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:14px}
+.mo-root .mo-a-dot{width:6px;height:6px;background:var(--mo-violet);border-radius:50%;flex:none}
+.mo-root .mo-a-body{font-size:15px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;max-width:100%}
+.mo-root .mo-w{display:inline-block;opacity:0;max-width:100%;overflow-wrap:anywhere;vertical-align:baseline}
+.mo-root .mo-actions{display:flex;align-items:center;gap:20px;min-height:44px;margin-top:12px}
+.mo-root .mo-actions button{min-height:44px;padding:10px 0;background:transparent;border-bottom:1px solid var(--line);font-size:13px;color:var(--ink)}
+.mo-root [hidden]{display:none!important}
+.mo-root .mo-error{font-size:14px;line-height:1.7;color:var(--ink);border-left:2px solid var(--mo-violet);padding:12px 16px;background:var(--mo-soft);margin-top:16px}
+.mo-root .mo-live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.mo-root .mo-actor[data-shake]{animation:bm-mo-shake .26s ease-in-out}.mo-root .mo-actor[data-flash] .mo-ring{opacity:1}
+@keyframes bm-mo-spin{to{--mo-orb-angle:360deg}}
+@keyframes bm-mo-drift{from{transform:translateX(-14%)}to{transform:translateX(14%)}}
+@keyframes bm-mo-shimmer{from{background-position:150% 0}to{background-position:-100% 0}}
+@keyframes bm-mo-dot{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@keyframes bm-mo-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes bm-mo-out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-6px)}}
+@keyframes bm-mo-fade-in{from{opacity:0}to{opacity:1}}@keyframes bm-mo-fade-out{from{opacity:1}to{opacity:0}}
+@keyframes bm-mo-shake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 4px),-50%)}75%{transform:translate(calc(-50% + 4px),-50%)}}
+@media(prefers-reduced-motion:reduce){.mo-root .mo-aurora i,.mo-root .mo-dots i,.mo-root .mo-in,.mo-root .mo-out,.mo-root .mo-actor[data-shake]{animation:none}.mo-root .mo-w{opacity:1;transform:none!important;filter:none!important}}
+@media(max-width:375px){.mo-root .mo-input{gap:7px;padding-left:12px}.mo-root .mo-spark{width:17px;height:17px}.mo-root .mo-field::placeholder{font-size:12px}}

@@ -1,0 +1,28 @@
+/* Scroll reveals adapted from the owner's Forma Pilates Studio template (src/components/reveal). */
+/* Only the runtime may opt an element into the hidden state. SSR stays readable. */
+[data-reveal-state="pending"] {
+  opacity: 0;
+}
+
+[data-reveal-state="pending"] [data-reveal-token],
+[data-reveal-state="running"] [data-reveal-token] {
+  display: inline-block;
+  /* Long new copy must wrap rather than widen a mobile viewport. */
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  vertical-align: baseline;
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  [data-reveal],
+  [data-reveal-token] {
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility must override active Web Animations. */
+    opacity: 1 !important;
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility must override active Web Animations. */
+    filter: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility must override active Web Animations. */
+    translate: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: accessibility must override active Web Animations. */
+    scale: none !important;
+  }
+}

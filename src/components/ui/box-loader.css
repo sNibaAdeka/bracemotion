@@ -1,0 +1,19 @@
+/* Box Loader (21st.dev). Four cubes roll around an isometric grid; colours follow the BraceMotion accent. */
+.bm-box-loader{display:grid;place-items:center;width:100%;height:100%;opacity:0;animation:bm-loader-in .5s cubic-bezier(.22,1,.36,1) .25s forwards}
+.bm-box-loader .boxes{--size:30px;--duration:800ms;height:calc(var(--size)*2);width:calc(var(--size)*3);position:relative;transform-style:preserve-3d;transform-origin:50% 50%;margin-top:calc(var(--size)*1.5*-1);transform:rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0)}
+.bm-box-loader .box{width:var(--size);height:var(--size);top:0;left:0;position:absolute;transform-style:preserve-3d}
+.bm-box-loader .box-1{transform:translate(100%,0);animation:bm-box1 var(--duration) linear infinite}
+.bm-box-loader .box-2{transform:translate(0,100%);animation:bm-box2 var(--duration) linear infinite}
+.bm-box-loader .box-3{transform:translate(100%,100%);animation:bm-box3 var(--duration) linear infinite}
+.bm-box-loader .box-4{transform:translate(200%,0);animation:bm-box4 var(--duration) linear infinite}
+.bm-box-loader .face{--background:#c69bff;--top:auto;--right:auto;--bottom:auto;--left:auto;--translateZ:calc(var(--size)/2);--rotateY:0deg;--rotateX:0deg;position:absolute;width:100%;height:100%;background:var(--background);top:var(--top);right:var(--right);bottom:var(--bottom);left:var(--left);transform:rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ))}
+.bm-box-loader .face-front{--top:0;--left:0}
+.bm-box-loader .face-right{--background:#8a5ad6;--right:0;--rotateY:90deg}
+.bm-box-loader .face-top{--background:#a979ee;--rotateX:-90deg}
+.bm-box-loader .face-back{--background:rgb(198 155 255 / .14);--top:0;--left:0;--translateZ:calc(var(--size)*3*-1)}
+@keyframes bm-loader-in{to{opacity:1}}
+@keyframes bm-box1{0%,50%{transform:translate(100%,0)}100%{transform:translate(200%,0)}}
+@keyframes bm-box2{0%{transform:translate(0,100%)}50%{transform:translate(0,0)}100%{transform:translate(100%,0)}}
+@keyframes bm-box3{0%,50%{transform:translate(100%,100%)}100%{transform:translate(0,100%)}}
+@keyframes bm-box4{0%{transform:translate(200%,0)}50%{transform:translate(200%,100%)}100%{transform:translate(100%,100%)}}
+@media(prefers-reduced-motion:reduce){.bm-box-loader,.bm-box-loader .box{animation:none;opacity:1}}

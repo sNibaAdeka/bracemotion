@@ -1,8 +1,7 @@
-# The pages in site/ are already built, so there is nothing to compile.
-# Netlify installs package.json dependencies for the functions in netlify/functions.
+# Vite builds the site into dist/; Netlify bundles the inquiry functions from netlify/functions.
 [build]
-  command = "echo 'Static site, no build step'"
-  publish = "site"
+  command = "npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
@@ -12,5 +11,10 @@
 
 [[headers]]
   for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"

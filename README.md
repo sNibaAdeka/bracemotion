@@ -8,54 +8,58 @@ Landing page for **BraceMotion**, a student research prototype: a wrist-worn dev
 
 ## What is here
 
-This is the R5 version of the site from October 2026: the dark page with the purple hero, the 3D bracelet you can take apart (Assembled / Exploded) and the large Evolventa wordmark.
+The R5 version of the site: the dark page with the purple hero, the 3D bracelet you can take apart (Assembled / Exploded) and the large wordmark. Built with Vite, React 19, three.js (react-three-fiber), Motion and GSAP.
 
 ```
-site/                 the built site, served as is
-  assets/             JavaScript and CSS bundles, including the 3D scene
-  fonts/              Evolventa (see fonts/NOTICE.txt for its licences)
-  images/             prototype photographs, V2 to V4
-  _redirects          client-side routes: /sign-in, /account/preview
-netlify/functions/    the inquiry API used by the "Discuss the project" form
-  inquiry.ts          POST /api/inquiry, stores requests in Netlify Blobs
-  health.ts           GET /api/health
+src/
+  App.tsx                     page sections
+  components/ui/              hero (lycoris-specimen), 21st.dev components
+  components/reveal/          scroll reveals (from the Forma Pilates Studio template)
+  scene/                      the 3D bracelet: geometry, materials, lighting, motion
+public/                       fonts, photographs, licences, _redirects
+netlify/functions/            the inquiry API used by the "Discuss the project" form
+  inquiry.ts                  POST /api/inquiry, stores requests in Netlify Blobs
+  health.ts                   GET /api/health
 ```
 
-## How it was restored
+### The 3D bracelet
 
-The original build was published from a local folder and never committed. The newest complete copy on disk was the R5 "pure black" revision, which turned every background black. This repository takes that build and puts back the colours of the revision before it (R5 with NexaCore panels), using the values recorded in its QA report:
+- Studio image-based lighting (three's `RoomEnvironment`), a key light, a lavender rim light and soft 2048 px shadows.
+- Physical materials: a satin printed shell with fine layer lines, a woven strap with sheen, a rounded strap edge and capped ends.
+- Motion on the cover: the bracelet turns and rises in on load, floats, and tilts toward the pointer. Scroll and drag are damped. Frames run continuously only while that motion is on screen.
 
-| Part | Pure black | Restored |
-| --- | --- | --- |
-| Hero stage | `#000` | `#160b26` with a soft purple glow |
-| Page and header | `#000` | `#030305` |
-| Section panels | `#000` | `#08080c`, `#111116`, `#141419` |
-| "04" card | `#000` | `#1b1624` |
-| Question block | `#000` | `#17151e` |
-| Pricing cards | `#000` | `#191222`, `#15151e`, `#1d141f` |
-| Service card glow | hidden | shown |
+### Motion and design
 
-All changes are in `site/assets/index-BSkvKKTD.css`; the JavaScript is the original build.
+- Section headings sharpen word by word out of a blur, paragraphs rise line by line, cards lift in with a stagger. Same timings as the owner's Forma Pilates Studio template; all reveals respect `prefers-reduced-motion`.
+- 21st.dev components supplied by the owner: Background Paths (drifting lines behind the hero and on the sign-in page) and Box Loader (shown while the 3D scene loads).
+
+### Colours
+
+The R5 "pure black" revision turned every background black; this repository uses the colours of the revision before it (R5 with NexaCore panels), taken from that release's QA report: hero `#160b26` with a soft glow, page `#030305`, panels `#08080c`, `#111116`, `#141419`.
 
 The November 2026 Next.js rebuild lives on the [`nextjs-rebuild`](https://github.com/sNibaAdeka/bracemotion/tree/nextjs-rebuild) branch.
 
 ## Run it locally
 
 ```bash
-npx serve site -s
+npm install
+npm run dev
 ```
 
-The inquiry form needs the Netlify Functions runtime:
+Checks:
 
 ```bash
-npm install
-npx netlify dev
+npm run typecheck
+npm test
+npm run build
 ```
+
+The inquiry form needs the Netlify Functions runtime: `npx netlify dev`.
 
 ## Deploy
 
-The repository is connected to Netlify: every push to `main` publishes `site/` and deploys the functions (see `netlify.toml`).
+The repository is connected to Netlify: every push to `main` runs `npm run build`, publishes `dist/` and deploys the functions (see `netlify.toml`).
 
 ## Credits
 
-Third-party code and assets are listed in `site/attributions.txt` and `site/r5-component-attributions.txt`. The NexaCore card adaptations are MIT-licensed (`site/licenses/nexacore/`). Photographs come from the BraceMotion project presentation.
+Third-party code and assets are listed in `public/attributions.txt` and `public/r5-component-attributions.txt`. The NexaCore card adaptations are MIT-licensed (`public/licenses/nexacore/`). Photographs come from the BraceMotion project presentation.

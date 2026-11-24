@@ -1,0 +1,16 @@
+/* NexaCore service-card glow and orbit badge, adapted under its retained MIT licence. */
+.intro .function-notes{gap:18px;padding-top:0;border-top:0}
+.function-notes .nexacore-service-card{position:relative;isolation:isolate;overflow:hidden;display:flex;min-width:0;min-height:300px;padding:0;border:1px solid var(--line);border-radius:28px;background:var(--section-deep);transition:border-color .25s}
+.nexacore-service-glow{position:absolute;inset:0 0 auto;height:70%;z-index:-1;pointer-events:none;opacity:.7;transform:translateY(-18%);background:radial-gradient(120% 90% at 50% 0%,#c86fff45,transparent 70%),linear-gradient(160deg,#1c4eff20,transparent 60%);transition:transform .5s,opacity .5s}
+.nexacore-service-copy{position:relative;flex:1;min-width:0;padding:28px;display:flex;flex-direction:column;align-items:flex-start}
+.nexacore-service-badge{display:inline-flex;align-items:center;gap:9px;padding:8px 13px;border:1px solid #c69bff40;border-radius:999px;background:var(--tint);color:var(--ink);font-size:11px;line-height:1.5;margin-bottom:36px}
+.nexacore-service-icon{width:18px;height:18px;flex:none;color:var(--accent)}
+.nexacore-service-copy h3{font-size:23px;font-weight:400;line-height:1.3;letter-spacing:-.035em}
+.nexacore-service-copy p{font-size:13px;line-height:1.8;color:var(--muted);margin-top:15px;max-width:32ch}
+.nexacore-service-link{display:inline-flex;gap:15px;align-items:center;min-height:44px;margin-top:auto;padding-top:20px;color:var(--accent);font-size:11px;line-height:1.6}
+.nexacore-service-link span{font-size:19px}
+.nexacore-service-card:focus-within{border-color:var(--accent)}
+@media(hover:hover) and (pointer:fine){.nexacore-service-card:hover{border-color:#9871bd}.nexacore-service-card:hover .nexacore-service-glow{transform:translateY(0);opacity:1}}
+:root[data-theme=light] .nexacore-service-glow{opacity:.25}
+@media(max-width:767px){.function-notes .nexacore-service-card{min-height:270px;border-radius:24px}.nexacore-service-copy{padding:25px}.nexacore-service-badge{margin-bottom:30px}.nexacore-service-copy p{font-size:14px}.nexacore-service-link{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.nexacore-service-card,.nexacore-service-glow{transition:none}.nexacore-service-glow{transform:none}}

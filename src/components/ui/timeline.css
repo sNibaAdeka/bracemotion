@@ -1,0 +1,52 @@
+/* The supplied alternating journey effect, scoped to this instance's shell. */
+.bm-timeline{position:relative;border-top:1px solid var(--line);margin-top:48px;padding-top:28px;min-width:0}
+.bm-timeline-heading{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:26px}
+.bm-timeline-heading h3{font-size:22px;font-weight:400;letter-spacing:-.025em}
+.bm-timeline-heading p{font-size:12px;line-height:1.7;color:var(--journey-muted);max-width:290px}
+.bm-timeline-source img{width:100%;height:auto;max-width:300px;object-fit:contain}
+.bm-timeline-viewport{position:relative;min-width:0}
+.bm-timeline-track-wrap{position:relative;min-width:0}
+.bm-timeline-track{margin:0;padding:0;list-style:none}
+.bm-journey-item{position:relative;padding:24px 0 24px 28px;border-bottom:1px solid var(--line);min-width:0}
+.bm-journey-label{font-size:13px;color:var(--journey-active);display:block;margin-bottom:12px}
+.bm-journey-copy h4{font-size:22px;font-weight:400;line-height:1.3;letter-spacing:-.025em;margin:0 0 12px}
+.bm-journey-copy p{font-size:14px;line-height:1.75;color:var(--journey-muted);max-width:420px;overflow-wrap:anywhere}
+.bm-journey-source{display:block;margin-top:16px;font-size:11px;line-height:1.6;color:var(--journey-muted)}
+.bm-journey-dot{position:absolute;left:0;top:30px;width:7px;height:7px;border-radius:50%;background:var(--journey-active)}
+.bm-journey-stem,.bm-journey-line{display:none}
+@media(min-width:1100px) and (min-height:780px) and (prefers-reduced-motion:no-preference){
+ .bm-timeline[data-timeline-mode=horizontal] .bm-timeline-viewport{overflow:hidden;min-height:470px;padding-block:30px}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-timeline-track-wrap{width:max-content}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-timeline-track{display:flex;gap:40px;width:max-content;will-change:transform}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-item{width:clamp(340px,33vw,460px);min-height:410px;height:auto;display:grid;grid-template-rows:1fr 1fr;border:0;padding:0 28px}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-copy{min-width:0}
+ .bm-timeline[data-timeline-mode=horizontal] .is-top .bm-journey-copy{grid-row:1;align-self:end;padding-bottom:32px}
+ .bm-timeline[data-timeline-mode=horizontal] .is-bottom .bm-journey-copy{grid-row:2;align-self:start;padding-top:32px}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-copy h4{font-size:24px}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-copy p{font-size:13px;line-height:1.65}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-label{margin-bottom:8px}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-source{font-size:10px;margin-top:10px}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-line{display:block;position:absolute;top:50%;left:0;height:1px;width:100%;background:var(--journey-active);transform-origin:left;pointer-events:none}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-stem{display:block;position:absolute;left:14px;width:1px;height:24px;background:var(--journey-active);transform-origin:bottom}
+ .bm-timeline[data-timeline-mode=horizontal] .is-top .bm-journey-stem{top:calc(50% - 24px)}
+ .bm-timeline[data-timeline-mode=horizontal] .is-bottom .bm-journey-stem{top:50%;transform-origin:top}
+ .bm-timeline[data-timeline-mode=horizontal] .bm-journey-dot{left:11px;width:7px;height:7px}
+ .bm-timeline[data-timeline-mode=horizontal] .is-top .bm-journey-dot{top:calc(50% - 28px)}
+ .bm-timeline[data-timeline-mode=horizontal] .is-bottom .bm-journey-dot{top:calc(50% + 20px)}
+}
+/* A medium/short or reduced-motion exhibit stays chronological, but uses
+   two readable content columns rather than four full-width empty rows. */
+@media(min-width:900px){
+ .bm-timeline[data-timeline-mode=flow] .bm-timeline-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;max-width:1100px}
+ .bm-timeline[data-timeline-mode=flow] .bm-journey-copy p{max-width:none}
+}
+@media(max-width:767px){.bm-timeline-heading{display:block}.bm-timeline-heading p{margin-top:12px}.bm-journey-item{padding-left:24px}.bm-journey-copy h4{font-size:21px}.bm-journey-copy p{font-size:14px}}
+
+/* MobileStack rail and version chips from NexaCore precision.tsx (MIT, retained notice). */
+.nexacore-history-rail[data-timeline-mode=flow] .bm-timeline-track{row-gap:22px;padding-left:22px}
+.nexacore-history-rail[data-timeline-mode=flow] .bm-journey-item{padding:24px;border:1px solid var(--line);border-radius:22px;background:var(--section-deep)}
+.nexacore-history-rail[data-timeline-mode=flow] .bm-journey-item:before{content:'';position:absolute;left:-20px;top:28px;bottom:-24px;width:1px;background:linear-gradient(var(--journey-active),#c69bff30)}
+.nexacore-history-rail[data-timeline-mode=flow] .bm-journey-item:last-child:before{bottom:24px}
+.nexacore-history-rail[data-timeline-mode=flow] .bm-journey-dot{left:-23px;top:34px;box-shadow:0 0 14px #c69bff50}
+.nexacore-history-rail .bm-journey-label{display:inline-flex;align-items:center;min-height:32px;padding:5px 14px;border:1px solid var(--line);border-radius:999px;background:var(--tint);font-size:12px}
+@media(max-width:767px){.nexacore-history-rail[data-timeline-mode=flow] .bm-timeline-track{display:grid;gap:22px}.nexacore-history-rail[data-timeline-mode=flow] .bm-journey-item{padding:22px 20px}.nexacore-history-rail[data-timeline-mode=flow] .bm-journey-copy h4{font-size:21px}}
